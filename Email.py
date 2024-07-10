@@ -4,7 +4,8 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer
 import pickle
 import numpy as np
-st.image(r"C:\Users\HP\OneDrive\Desktop\inno12.png")
+image_path="inno12.png"
+st.image(image_path)
 model = pickle.load(open("nb.pkl","rb"))
 with open("bow.pkl","rb") as f:
       bow=pickle.load(f)
@@ -15,7 +16,9 @@ if email:
       Result = model.predict(Data)[0]
 if st.button("predict"):
       st.write("this email is a:",Result)
-      if Result =="spam":
-             st.image(r"C:\Users\HP\OneDrive\Desktop\spam2.jpg")
+      if Result == "spam":
+            image1="spam2.jpg"
+            st.image(image1)
       else:
-           st.image(r"C:\Users\HP\OneDrive\Desktop\ham.jpg") 
+            image2="ham.jpg"
+           st.image(image2) 
