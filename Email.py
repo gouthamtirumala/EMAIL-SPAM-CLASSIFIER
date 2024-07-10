@@ -1,24 +1,51 @@
 import streamlit as st
-import pandas as pd
-from nltk.stem import WordNetLemmatizer
-from sklearn.feature_extraction.text import CountVectorizer
 import pickle
-import numpy as np
-image_path="inno12.png"
+from sklearn.feature_extraction.text import CountVectorizer
+
+# Path to images (assuming they are in the same directory as the script)
+image_path = "inno12.png"
+image_spam = "spam2.jpg"
+image_ham = "ham.jpg"
+
+# Display an image
 st.image(image_path)
-model = pickle.load(open("nb.pkl","rb"))
-with open("bow.pkl","rb") as f:
-      bow=pickle.load(f)
+
+# Load the trained model
+try:
+    with open("nb.pkl", "rb") as f:
+        model = pickle.load(f)
+except Exception as e:
+    st.error(f"Error loading model: {e}")
+    st.stop()
+
+# Load the CountVectorizer (bow) used during model training
+try:
+    with open("bow.pkl", "rb") as f:
+        bow = pickle.load(f)
+except Exception as e:
+    st.error(f"Error loading CountVectorizer (bow): {e}")
+    st.stop()
+
+# Streamlit UI
 st.title("MAIL SPAM-HAM CLASSIFIER")
-email = st.text_input("enter the Email:")
-if email:
-      Data = bow.transform([email]).toarray()
-      Result = model.predict(Data)[0]
-if st.button("predict"):
-      st.write("this email is a:",Result)
-      if Result == "spam":
-            image1="spam2.jpg"
-            st.image(image1)
-      else:
-            image2="ham.jpg"
-           st.image(image2) 
+
+email = st.text_input("Enter the Email:")
+
+if st.button("Predict"):
+    if email:
+        # Transform the input email using the CountVectorizer (bow)
+        email_vectorized = bow.transform([email]).toarray()
+        
+        # Make prediction
+        prediction = model.predict(email_vectorized)[0]
+        
+        # Display the result
+        st.write(f"This email is: {prediction}")
+        
+        # Display corresponding image based on prediction
+        if prediction == "spam":
+            st.image(image_spam)
+        else:
+            st.image(image_ham)
+    else:
+        st.error("Please enter an email to predict.")
