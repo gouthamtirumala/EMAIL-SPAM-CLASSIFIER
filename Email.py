@@ -3,7 +3,7 @@ import pickle
 from sklearn.feature_extraction.text import CountVectorizer
 
 # Path to images (assuming they are in the same directory as the script)
-image_path = "inno12.png"
+image_path = "inno12.jpeg"
 image_spam = "spam2.jpg"
 image_ham = "ham.jpg"
 
